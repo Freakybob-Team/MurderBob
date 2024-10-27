@@ -144,7 +144,7 @@ public class Game extends JFrame implements ActionListener {
 
     private void loadSprite() {
         try {
-            freakyBobSprite = ImageIO.read(new File("Code\\Assets\\Freakybob.png"));
+            freakyBobSprite = ImageIO.read(new File("Assets\\Freakybob.png"));
         } catch (Exception e) {
             System.err.println("Error loading sprite: " + e.getMessage());
             e.printStackTrace();
@@ -152,7 +152,7 @@ public class Game extends JFrame implements ActionListener {
     }
     private void loadGunshotSound() {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Code\\Assets\\gunshot.wav"));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Assets\\gunshot.wav"));
             gunshotClip = AudioSystem.getClip();
             gunshotClip.open(audioInputStream);
         } catch (Exception e) {
@@ -169,7 +169,7 @@ public class Game extends JFrame implements ActionListener {
     }
     private void playMusic() {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Code\\Assets\\awesome_ass_music_David_Fesliyan.wav"));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Assets\\awesome_ass_music_David_Fesliyan.wav"));
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -450,7 +450,7 @@ class Enemy {
 
     private void loadSprite() {
         try {
-            enemySprite = ImageIO.read(new File("Code\\Assets\\Enemy.png"));
+            enemySprite = ImageIO.read(new File("Assets\\Enemy.png"));
         } catch (IOException e) {
             System.err.println("Error loading enemy sprite: " + e.getMessage());
             e.printStackTrace();
