@@ -129,7 +129,7 @@ public class Game extends JFrame implements ActionListener {
 
     private void loadSprite() {
         try {
-            freakyBobSprite = ImageIO.read(new File("Code\\Assets\\Freakybob.png"));
+            freakyBobSprite = ImageIO.read(new File("Assets\\Freakybob.png"));
         } catch (Exception e) {
             System.err.println("Error loading sprite: " + e.getMessage());
             e.printStackTrace();
@@ -137,7 +137,7 @@ public class Game extends JFrame implements ActionListener {
     }
     private void loadGunshotSound() {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Code\\Assets\\gunshot.wav"));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Assets\\gunshot.wav"));
             gunshotClip = AudioSystem.getClip();
             gunshotClip.open(audioInputStream);
         } catch (Exception e) {
@@ -154,7 +154,7 @@ public class Game extends JFrame implements ActionListener {
     }
     private void playMusic() {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Code\\Assets\\awesome_ass_music_David_Fesliyan.wav"));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Assets\\awesome_ass_music_David_Fesliyan.wav"));
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -396,7 +396,7 @@ class Enemy {
 
     private void loadSprite() {
         try {
-            enemySprite = ImageIO.read(new File("Code\\Assets\\ScarySquirtward.png"));
+            enemySprite = ImageIO.read(new File("Assets\\ScarySquirtward.png"));
         } catch (IOException e) {
             System.err.println("Error loading enemy sprite: " + e.getMessage());
             e.printStackTrace();
@@ -447,9 +447,9 @@ class Perk {
     protected void loadImage() {
         try {
             if (type == 0) {
-                image = ImageIO.read(new File("Code/Assets/green-marijuana-leaf-png_252592.jpg"));
+                image = ImageIO.read(new File("Assets/green-marijuana-leaf-png_252592.jpg"));
             } else if (type == 1) {
-                image = ImageIO.read(new File("Code/Assets/speed_perk.png")); 
+                image = ImageIO.read(new File("Assets/speed_perk.png")); 
             }
         } catch (IOException e) {
             e.printStackTrace();
