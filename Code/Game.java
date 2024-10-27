@@ -48,6 +48,24 @@ public class Game extends JFrame implements ActionListener {
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     shoot();
                 }
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    upPressed = true;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    downPressed = true;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    leftPressed = true;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    rightPressed = true;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_R && playerHealth <= 0) {
+                    restartGame();
+                }
+                if (e.getKeyCode() == KeyEvent.VK_SPACE) {
+                    shoot();
+                }
                 if (e.getKeyCode() == KeyEvent.VK_W) {
                     upPressed = true;
                 }
@@ -66,6 +84,18 @@ public class Game extends JFrame implements ActionListener {
             }
 
             public void keyReleased(KeyEvent e) {
+                if (e.getKeyCode() == KeyEvent.VK_UP) {
+                    upPressed = false;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                    downPressed = false;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                    leftPressed = false;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                    rightPressed = false;
+                }
                 if (e.getKeyCode() == KeyEvent.VK_W) {
                     upPressed = false;
                 }
