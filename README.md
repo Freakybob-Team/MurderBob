@@ -6,3 +6,5 @@ squirrel for making the game
 wish for adding arrow key support
 # images
 ![image](https://github.com/user-attachments/assets/15f38f21-fdb1-4168-be75-f59291cbb19e)
+# build jar
+https://dev.to/rohitk570/create-an-executable-jar-file-on-vs-code-n-command-line-154b
