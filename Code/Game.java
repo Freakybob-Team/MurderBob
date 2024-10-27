@@ -28,7 +28,15 @@ public class Game extends JFrame implements ActionListener {
     private Clip clip;
     private Random random;
     private Clip gunshotClip;
+    private boolean isPaused = false;
+    private String[] quotes = {
+        "Poo poo go do baby",
+        "My grandma can play this without pausing",
+        "Your mom."
+    };
 
+    private JDialog pauseDialog;
+   
     public Game() {
         setTitle("MurderBob");
         setSize(800, 600);
@@ -42,9 +50,19 @@ public class Game extends JFrame implements ActionListener {
         playerY = 300;
         random = new Random();
         setFocusable(true);
+        random = new Random();
         
         addKeyListener(new KeyAdapter() {
             public void keyPressed(KeyEvent e) {
+                if (isPaused) {
+                    if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                        resumeGame();
+                    }
+                    return;
+                }
+                if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+                    pauseGame();
+                }
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     shoot();
                 }
@@ -59,9 +77,6 @@ public class Game extends JFrame implements ActionListener {
                 }
                 if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
                     rightPressed = true;
-                }
-                if (e.getKeyCode() == KeyEvent.VK_R && playerHealth <= 0) {
-                    restartGame();
                 }
                 if (e.getKeyCode() == KeyEvent.VK_SPACE) {
                     shoot();
@@ -129,7 +144,7 @@ public class Game extends JFrame implements ActionListener {
 
     private void loadSprite() {
         try {
-            freakyBobSprite = ImageIO.read(new File("Assets\\Freakybob.png"));
+            freakyBobSprite = ImageIO.read(new File("Code\\Assets\\Freakybob.png"));
         } catch (Exception e) {
             System.err.println("Error loading sprite: " + e.getMessage());
             e.printStackTrace();
@@ -137,7 +152,7 @@ public class Game extends JFrame implements ActionListener {
     }
     private void loadGunshotSound() {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Assets\\gunshot.wav"));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Code\\Assets\\gunshot.wav"));
             gunshotClip = AudioSystem.getClip();
             gunshotClip.open(audioInputStream);
         } catch (Exception e) {
@@ -154,7 +169,7 @@ public class Game extends JFrame implements ActionListener {
     }
     private void playMusic() {
         try {
-            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Assets\\awesome_ass_music_David_Fesliyan.wav"));
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(new File("Code\\Assets\\awesome_ass_music_David_Fesliyan.wav"));
             clip = AudioSystem.getClip();
             clip.open(audioInputStream);
             clip.loop(Clip.LOOP_CONTINUOUSLY);
@@ -205,7 +220,19 @@ public class Game extends JFrame implements ActionListener {
         }
         currentWave++;
     }
-
+    private void restartGame() {
+        playerHealth = 100;
+        currentWave = 0;
+        preparing = true;
+        prepareTime = 10;
+        bullets.clear();
+        enemies.clear();
+        perks.clear();
+        playerX = 400;
+        playerY = 300;
+        startPreparation();
+        timer.start();
+    }
     private void spawnPerk() {
         int perkX = random.nextInt(getWidth() - 32);
         int perkY = random.nextInt(getHeight() - 32);
@@ -288,21 +315,48 @@ public class Game extends JFrame implements ActionListener {
         }
         repaint();
     }
-
-    private void restartGame() {
-        playerHealth = 100;
-        currentWave = 0;
-        preparing = true;
-        prepareTime = 10;
-        bullets.clear();
-        enemies.clear();
-        perks.clear();
-        playerX = 400;
-        playerY = 300;
-        startPreparation();
+    private void pauseGame() {
+        if (!isPaused) {
+            isPaused = true;
+            timer.stop();
+            if (clip.isRunning()) clip.stop();
+            createPauseDialog();
+        }
+    }
+    
+    private void resumeGame() {
+        isPaused = false;
         timer.start();
+        clip.start();
+        pauseDialog.dispose();
+    }
+    
+    private void createPauseDialog() {
+        pauseDialog = new JDialog(this, "Game Paused", true);
+        pauseDialog.setSize(300, 200);
+        pauseDialog.setLocationRelativeTo(this);
+        pauseDialog.setLayout(new FlowLayout());
+
+    
+        String randomQuote = quotes[random.nextInt(quotes.length)];
+        JLabel quoteLabel = new JLabel(randomQuote);
+        pauseDialog.add(quoteLabel);
+
+        JButton resumeButton = new JButton("Resume");
+        resumeButton.addActionListener(e -> resumeGame());
+        pauseDialog.add(resumeButton);
+
+        JButton homeButton = new JButton("Home");
+        homeButton.addActionListener(e -> returnToHome());
+        pauseDialog.add(homeButton);
+
+        pauseDialog.setVisible(true);
     }
 
+    private void returnToHome() {
+       // This will be here cause lihgkjlef/;g
+    }
+    
     private class GamePanel extends JPanel {
         public GamePanel() {
             setBackground(Color.BLACK);
@@ -396,7 +450,7 @@ class Enemy {
 
     private void loadSprite() {
         try {
-            enemySprite = ImageIO.read(new File("Assets\\ScarySquirtward.png"));
+            enemySprite = ImageIO.read(new File("Code\\Assets\\Enemy.png"));
         } catch (IOException e) {
             System.err.println("Error loading enemy sprite: " + e.getMessage());
             e.printStackTrace();
@@ -404,11 +458,11 @@ class Enemy {
     }
 
     public void moveTowards(int playerX, int playerY) {
-        if (x < playerX) x += SPEED;
-        if (x > playerX) x -= SPEED;
-        if (y < playerY) y += SPEED;
-        if (y > playerY) y -= SPEED;
+        double angle = Math.atan2(playerY - y, playerX - x);
+        x += SPEED * Math.cos(angle);
+        y += SPEED * Math.sin(angle);
     }
+
 
     public void draw(Graphics g) {
         if (enemySprite != null) {
@@ -447,9 +501,9 @@ class Perk {
     protected void loadImage() {
         try {
             if (type == 0) {
-                image = ImageIO.read(new File("Assets/green-marijuana-leaf-png_252592.jpg"));
+                image = ImageIO.read(new File("Code/Assets/green-marijuana-leaf-png_252592.jpg"));
             } else if (type == 1) {
-                image = ImageIO.read(new File("Assets/speed_perk.png")); 
+                image = ImageIO.read(new File("Code/Assets/speed_perk.png")); 
             }
         } catch (IOException e) {
             e.printStackTrace();
